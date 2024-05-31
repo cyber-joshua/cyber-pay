@@ -3,16 +3,17 @@
 import Image from "next/image";
 import HomeBgdDot from "@/components/TopAnimation";
 import Wallet from "@/components/Wallet";
-import usePasskey from "@/hooks/usePasskeyTx";
+import { useAtomValue } from "jotai";
+import { passkeyAtom } from "@/atoms";
 
 export default function Home() {
 
-  const { authInfo } = usePasskey();
+  const authInfo = useAtomValue(passkeyAtom)
   const isLoggedIn = Boolean(authInfo);
 
   return (
     <main className="w-full h-screen flex flex-col">
-      <div className="relative w-full h-[calc(100vh-360px)] flex-none">
+      <div className={"relative overflow-x-hidden w-full transition-all duration-500 flex-none " + (isLoggedIn ? "h-48" : "h-[calc(100vh-360px)]")}>
         <div className={
           "absolute w-full transition-all top-0 h-96 z-10 " + 
           (isLoggedIn ? '-translate-y-24': 'translate-y-16')
