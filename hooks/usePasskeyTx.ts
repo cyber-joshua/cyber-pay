@@ -1,4 +1,3 @@
-import 'fast-text-encoding'; 
 import { p256 } from '@noble/curves/p256';
 import {
   type Hex,

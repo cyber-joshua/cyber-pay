@@ -18,6 +18,12 @@ export default function HomeBgdDot() {
       <LayoutGroup>
         <WaveDot />
       </LayoutGroup>
+      <div 
+        style={{ width: initialSize, height: initialSize }}
+        className='bg-white rounded-full z-[9999] absolute'
+      >
+
+      </div>
     </div>
   );
 }
