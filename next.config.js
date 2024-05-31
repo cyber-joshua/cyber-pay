@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
 const withPWA = require('next-pwa')({
   dest: 'public'
 })
 
-export default withPWA(nextConfig);
+const nextConfig = {
+  /* config options here */
+}
+ 
+module.exports = withPWA(nextConfig)
