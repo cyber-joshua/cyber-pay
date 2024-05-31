@@ -121,18 +121,21 @@ export default function Login() {
           </div>
           
           <Button
+            variant="cyber"
             onClick={() => {
               setPasskeyInfo(undefined)
             }}
           >Logout</Button>
         </div>
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="flex justify-evenly gap-4">
           <Button
+          variant="cyber"
             onClick={handleGet}
             disabled={loginLoading}
           >Login with passkey</Button>
           <Button
+          variant="cyber"
             onClick={handleCreate}
             disabled={registerLoading}
           >Create a passkey</Button>
