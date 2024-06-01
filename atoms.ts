@@ -1,3 +1,4 @@
+import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils'
 
 export interface PasskeyInfo {
@@ -8,3 +9,6 @@ export interface PasskeyInfo {
 }
 
 export const passkeyAtom = atomWithStorage<PasskeyInfo|undefined>('passkeyInfo', undefined)
+
+
+export const qrAtom = atom<string>('');

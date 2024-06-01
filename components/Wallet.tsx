@@ -103,13 +103,25 @@ export default function Wallet() {
             <div className="font-semibold text-lg text-stroke pl-2 mb-4">
               My Tokens
             </div>
-            {assets?.map((asset) => <AssetRow key={asset.symbol} token={asset} />)}
+            {assets ? <>
+              {assets.map((asset) => <AssetRow key={asset.symbol} token={asset} />)}
+            </> : (
+              <div className="text-gray-500">
+                No tokens yet
+              </div>
+            )}
           </div>
           <div className="w-full">
             <div className="font-semibold text-lg text-stroke pl-2 mb-4">
               My Transactions
             </div>
-            {txs?.map((tx) => <TxRow key={tx.txHash} tx={tx} />)}
+            {txs ? <>
+              {txs.map((tx) => <TxRow key={tx.txHash} tx={tx} />)}
+            </> : (
+              <div className="text-gray-500">
+                No transactions yet
+              </div>
+            )}
           </div>
           
           <Button variant="outline" onClick={() => { setPasskeyAtom(undefined) }}>
