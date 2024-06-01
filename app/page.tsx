@@ -15,7 +15,7 @@ export default function Home() {
       <div 
         className={
           "absolute left-0 right-0 top-0 overflow-hidden transition-all duration-700 flex justify-center items-center " + 
-          (isLoggedIn ? "scale-100 h-72" : "scale-125 h-[calc(100vh-300px)]")
+          (isLoggedIn ? "scale-100 h-80" : "scale-125 h-[calc(100vh-300px)]")
         }
       >
         <HomeBgdDot />
