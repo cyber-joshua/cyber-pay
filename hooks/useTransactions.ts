@@ -1,6 +1,8 @@
 import { gql } from "graphql-request";
 import { useGraphQL } from "./useGraphQL";
 import { TypedDocumentNode } from "@graphql-typed-document-node/core";
+import { useAtomValue } from "jotai";
+import { passkeyAtom } from "@/atoms";
 
 const MY_TRANSACTIONS = gql`
   query transactions {
@@ -37,9 +39,11 @@ const MY_TRANSACTIONS = gql`
 `
 
 export default function useTransactions() {
+  const authInfo = useAtomValue(passkeyAtom);
   const { data, isLoading, refetch } =
     useGraphQL(MY_TRANSACTIONS as unknown as TypedDocumentNode, undefined, {
-      queryKey: ['mytransactions']
+      queryKey: ['mytransactions'],
+      enabled: Boolean(authInfo)
     });
 
   return {

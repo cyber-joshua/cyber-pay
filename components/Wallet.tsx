@@ -58,11 +58,11 @@ export default function Wallet() {
   const [copied, setCopied] = useState(false);
 
   const { data: assetsData } = useAssets();
-  const assets = assetsData?.me.tokens as Asset[];
+  const assets = assetsData?.me?.tokens as Asset[];
   const totalUsd = assets?.reduce((partialSum, a) => partialSum + parseFloat(a.usdPrice), 0);
 
   const { data: txData } = useTransactions();
-  const txs = txData?.me.transactions.list.filter((t: Tx) => Boolean(t.asset?.length)) as Tx[];
+  const txs = txData?.me?.transactions.list.filter((t: Tx) => Boolean(t.asset?.length)) as Tx[];
 
   const router = useRouter();
 

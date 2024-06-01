@@ -1,6 +1,8 @@
 import { gql } from "graphql-request";
 import { useGraphQL } from "./useGraphQL";
 import { TypedDocumentNode } from "@graphql-typed-document-node/core";
+import { useAtomValue } from "jotai";
+import { passkeyAtom } from "@/atoms";
 
 const MY_ASSETS = gql`
   query assets {
@@ -20,9 +22,11 @@ const MY_ASSETS = gql`
 `
 
 export default function useAssets() {
+  const authInfo = useAtomValue(passkeyAtom);
   const { data, isLoading, refetch } =
     useGraphQL(MY_ASSETS as unknown as TypedDocumentNode, undefined, {
-      queryKey: ['myassets']
+      queryKey: ['myassets'],
+      enabled: Boolean(authInfo)
     });
 
   return {
