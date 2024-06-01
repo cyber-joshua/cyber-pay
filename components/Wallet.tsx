@@ -60,7 +60,6 @@ export default function Wallet() {
   const setPasskeyAtom = useSetAtom(passkeyAtom);
   const aa = authInfo?.aa;
   const [copied, setCopied] = useState(false);
-  const [pay, setPay] = useState(false);
 
   const { data: assetsData } = useAssets();
   const assets = assetsData?.me?.tokens as Asset[];
@@ -72,19 +71,11 @@ export default function Wallet() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (payInfo.startsWith(qrcodePrefix)) {
-      setPay(true);
-    } else {
-      toast({ description: 'Not a valid CyberPay QRCode' })
-    }
-  }, [payInfo])
-
-  useEffect(() => {
-    setTimeout(() => {
-      setPayInfo(`cyberpay:卖咖啡的---0x0414DDBf69294B1eE580eEf88862dEa94B726A07---0.01---ETH---${zeroAddress}---${18}`)
-    }, 3000)
-  }, [])
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setPayInfo(`cyberpay:卖咖啡的---0x0414DDBf69294B1eE580eEf88862dEa94B726A07---0.01---ETH---${zeroAddress}---${18}`)
+  //   }, 3000)
+  // }, [])
 
   return (
     <div className="h-full flex flex-col px-3 gap-12 items-center overflow-y-scroll pb-10">
@@ -147,11 +138,11 @@ export default function Wallet() {
           <Button variant="outline" onClick={() => { setPasskeyAtom(undefined) }}>
             Logout
           </Button>
-          <PayDialog payInfo={payInfo} aa={aa} open={pay} />
         </>
       ) : (
         <LoginButton />
       )}
+      <PayDialog />
     </div>
   )
 }
@@ -173,10 +164,10 @@ function AssetRow({
         </div>
       </div>
       <div className="flex-none font-semibold flex flex-col gap-0 text-right">
-        <div className="w-16 overflow-ellipsis">
-          {formatUnits(BigInt(token.balance), token.decimals)}
+        <div className="w-24 truncate">
+          {parseFloat(formatUnits(BigInt(token.balance), token.decimals)).toFixed(4)}
         </div>
-        <div className="text-sm text-gray-600 w-16 overflow-ellipsis text-stroke-thin -mt-1">
+        <div className="w-24 text-sm text-gray-600 overflow-ellipsis text-stroke-thin -mt-1">
           ${parseFloat(token.usdPrice).toFixed(2)}
         </div>
       </div>
@@ -204,13 +195,13 @@ function TxRow({
         <div className="text-sm text-gray-400">
           {isReceive ? 'From' : 'To'}
         </div>
-        <div>
+        <div className="max-w-[150px] truncate">
           {isReceive ? '好心人.cyber' : `${vendors[index]}.cyber`}
         </div>
       </div>
       <div className="flex-none font-semibold flex items-center gap-1.5">
-        <div className={isReceive ? "text-green-500" : "text-red-500"}>
-          {`${isReceive ? '+' : '-'}${tx.asset![0].amount}`}
+        <div className={"max-w-[100px] truncate " + (isReceive ? "text-green-500" : "text-red-500")}>
+          {`${isReceive ? '+' : '-'}${parseFloat(tx.asset![0].amount).toFixed(4)}`}
         </div>
         <img src={tx.asset![0].asset.imageUrl} alt={tx.asset![0].asset.symbol} width={16} height={16} />
         <div>

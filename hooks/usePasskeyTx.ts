@@ -251,5 +251,6 @@ export default function usePasskey() {
     authInfo,
     estimateUserOp: estimateGas,
     sendUserOp,
+    fetchBalance,
   };
 }

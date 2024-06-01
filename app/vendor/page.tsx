@@ -38,14 +38,14 @@ export default function VendorPage() {
   const [vendor, setVendor] = useState('')
   const [amount, setAmount] = useState('')
   const [vendorAddress, setVendorAddress] = useState('')
-  const {toast} = useToast();
+  const { toast } = useToast()
   const [selectedToken, setSelectedToken] = useState<SupportedToken>(supportedTokens[0])
 
   const [info, setInfo] = useState('');
 
   const generate = () => {
     if (!vendor || !amount || !vendorAddress) {
-      toast({description: 'Please fill in all fields'});
+      toast({variant: "destructive", description: 'Please fill in all fields'});
       return;
     }
     setInfo(`cyberpay:${vendor}---${vendorAddress}---${amount}---${selectedToken.symbol}---${selectedToken.address}---${selectedToken.decimals}`)

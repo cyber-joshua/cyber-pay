@@ -47,6 +47,8 @@ export default function CyberButton({
       controls.start({
         boxShadow: frames
       });
+    } else if (!loading && controls) {
+      controls.stop();
     }
   }, [loading, controls])
 
