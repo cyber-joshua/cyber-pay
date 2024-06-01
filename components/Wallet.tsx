@@ -67,7 +67,7 @@ export default function Wallet() {
   const router = useRouter();
 
   return (
-    <div className="h-full flex flex-col px-3 gap-12 items-center overflow-y-scroll">
+    <div className="h-full flex flex-col px-3 gap-12 items-center overflow-y-scroll pb-10">
       {authInfo ? (
         <>
           <div className=" flex flex-col items-center gap-1">
@@ -103,10 +103,10 @@ export default function Wallet() {
             <div className="font-semibold text-lg text-stroke pl-2 mb-4">
               My Tokens
             </div>
-            {assets ? <>
+            {assets?.length ? <>
               {assets.map((asset) => <AssetRow key={asset.symbol} token={asset} />)}
             </> : (
-              <div className="text-gray-500">
+              <div className="text-gray-500 w-full text-center">
                 No tokens yet
               </div>
             )}
@@ -115,10 +115,10 @@ export default function Wallet() {
             <div className="font-semibold text-lg text-stroke pl-2 mb-4">
               My Transactions
             </div>
-            {txs ? <>
+            {txs?.length ? <>
               {txs.map((tx) => <TxRow key={tx.txHash} tx={tx} />)}
             </> : (
-              <div className="text-gray-500">
+              <div className="text-gray-500 w-full text-center">
                 No transactions yet
               </div>
             )}
@@ -141,7 +141,7 @@ function AssetRow({
   token: Asset
 }) {
   return (
-    <div className="w-full flex gap-2 items-center px-4">
+    <div className="w-full flex gap-2 items-center px-4 border-b border-b-gray-200 pb-4 mb-4">
       <Image className="flex-none" src={token.imageUrl} alt={token.symbol} width={32} height={32} />
       <div className="flex-auto font-semibold flex flex-col">
         <div>
@@ -175,7 +175,7 @@ function TxRow({
   const isReceive = tx.name === 'receive';
 
   return (
-    <div className="w-full flex gap-2 items-center px-4">
+    <div className="w-full flex gap-2 items-center px-4 border-b border-b-gray-200 pb-4 mb-4">
       <div className="flex-none">
         {isReceive ? <Gift className="text-green-500" /> : <Send className="text-red-500" />}
       </div>
@@ -188,7 +188,7 @@ function TxRow({
         </div>
       </div>
       <div className="flex-none font-semibold flex items-center gap-1.5">
-        <div>
+        <div className={isReceive ? "text-green-500" : "text-red-500"}>
           {`${isReceive ? '+' : '-'}${tx.asset![0].amount}`}
         </div>
         <img src={tx.asset![0].asset.imageUrl} alt={tx.asset![0].asset.symbol} width={16} height={16} />
