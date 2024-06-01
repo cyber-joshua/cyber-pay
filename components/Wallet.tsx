@@ -3,18 +3,21 @@
 
 import LoginButton from "./LoginButton";
 import usePasskey from "@/hooks/usePasskeyTx";
-import { useSetAtom } from "jotai";
-import { passkeyAtom } from "@/atoms";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { passkeyAtom, qrAtom } from "@/atoms";
 import { Copy, Gift, Send, SquareCheck } from "lucide-react";
 import Image from "next/image";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAssets from "@/hooks/useAssets";
-import { Address, Hash, formatUnits } from "viem";
+import { Address, Hash, formatUnits, zeroAddress } from "viem";
 import CyberButton from "./CyberButton";
 import useTransactions from "@/hooks/useTransactions";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { qrcodePrefix } from "@/lib/constants";
+import { useToast } from "./ui/use-toast";
+import PayDialog from "./PayDialog";
 
 interface Asset {
   balance: string;
@@ -53,20 +56,35 @@ interface Tx {
 export default function Wallet() {
 
   const { authInfo, balance } = usePasskey();
+  const [payInfo, setPayInfo] = useAtom(qrAtom);
   const setPasskeyAtom = useSetAtom(passkeyAtom);
   const aa = authInfo?.aa;
   const [copied, setCopied] = useState(false);
+  const [pay, setPay] = useState(false);
 
   const { data: assetsData } = useAssets();
   const assets = assetsData?.me?.tokens as Asset[];
   const totalUsd = assets?.reduce((partialSum, a) => partialSum + parseFloat(a.usdPrice), 0);
 
   const { data: txData } = useTransactions();
+  const { toast } = useToast();
   const txs = txData?.me?.transactions.list.filter((t: Tx) => Boolean(t.asset?.length)) as Tx[];
 
   const router = useRouter();
 
+  useEffect(() => {
+    if (payInfo.startsWith(qrcodePrefix)) {
+      setPay(true);
+    } else {
+      toast({ description: 'Not a valid CyberPay QRCode' })
+    }
+  }, [payInfo])
 
+  useEffect(() => {
+    setTimeout(() => {
+      setPayInfo(`cyberpay:卖咖啡的---0x0414DDBf69294B1eE580eEf88862dEa94B726A07---0.01---ETH---${zeroAddress}---${18}`)
+    }, 3000)
+  }, [])
 
   return (
     <div className="h-full flex flex-col px-3 gap-12 items-center overflow-y-scroll pb-10">
@@ -129,6 +147,7 @@ export default function Wallet() {
           <Button variant="outline" onClick={() => { setPasskeyAtom(undefined) }}>
             Logout
           </Button>
+          <PayDialog payInfo={payInfo} aa={aa} open={pay} />
         </>
       ) : (
         <LoginButton />

@@ -3,16 +3,23 @@ import CyberButton from "./CyberButton";
 import { useState } from "react";
 import { Address, Hash, encodeFunctionData, erc20Abi, parseUnits, zeroAddress } from "viem";
 import usePasskey from "@/hooks/usePasskeyTx";
+import { useSetAtom } from "jotai";
+import { qrAtom } from "@/atoms";
 
 export default function PayDialog({
   payInfo,
   aa,
   open,
 }: {
-  payInfo: string;
+  payInfo?: string;
   aa?: Address;
   open: boolean;
 }) {
+  const { sendUserOp, estimateUserOp, authInfo, balance } = usePasskey();
+  const [loading, setLoading] = useState(false);
+  const setPayInfo = useSetAtom(qrAtom);
+
+  if (!payInfo) return null;
 
   const infoArr = payInfo.slice(qrcodePrefix.length).split(qrcodeSeparator);
   const vendorName = infoArr[0];
@@ -22,8 +29,6 @@ export default function PayDialog({
   const tokenAddress = infoArr[4];
   const tokenDecimal = parseInt(infoArr[5]);
 
-  const { sendUserOp, estimateUserOp, authInfo, balance } = usePasskey();
-  const [loading, setLoading] = useState(false);
 
   let callData;
   if (tokenAddress === zeroAddress) {
@@ -71,17 +76,22 @@ export default function PayDialog({
   }
 
   return (
-    <div className={"flex flex-col gap-6 transition-all duration-700 " + (open ? 'h-0' : 'h-full')}>
-      <div>WILL TRANSFER</div>
-      <div>{amount} {tokenSymbol}</div>
-      <div>TO</div>
-      <div>{vendorName}</div>
+    <div className={"absolute w-full h-full top-24 bg-white flex flex-col items-center pt-4 gap-3 transition-all duration-500 " + (open ? 'translate-y-0' : 'translate-y-[2000px]')}>
+      <div className="text-stroke-thin font-bold">WILL TRANSFER</div>
+      <div className="text-stroke font-extrabold text-4xl">{amount} {tokenSymbol}</div>
+      <div className="font-bold text-gray-400">TO</div>
+      <div className="text-stroke font-extrabold text-4xl">{vendorName}</div>
 
       <CyberButton 
         title="Confirm"
+        className="w-4/5 mt-12"
         loading={loading}
         onClick={send}
       />
+
+      <div className="underline cursor-pointer mt-6 text-gray-500" onClick={() => { setPayInfo('') }}>
+        CANCEL
+      </div>
     </div>
   )
 }
