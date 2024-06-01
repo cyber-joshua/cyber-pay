@@ -66,6 +66,8 @@ export default function Wallet() {
 
   const router = useRouter();
 
+
+
   return (
     <div className="h-full flex flex-col px-3 gap-12 items-center overflow-y-scroll pb-10">
       {authInfo ? (

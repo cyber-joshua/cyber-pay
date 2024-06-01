@@ -14,3 +14,5 @@ export const cyberTestnet = {
     },
   },
 };
+
+export const qrcodePrefix = 'cyberpay:';
