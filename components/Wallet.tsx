@@ -53,6 +53,8 @@ interface Tx {
   }
 }
 
+let audio: any;
+
 export default function Wallet() {
 
   const { authInfo, balance } = usePasskey();
@@ -71,7 +73,9 @@ export default function Wallet() {
   const latestTx = txs?.[0];
 
   const router = useRouter();
-  const audio = new Audio("/assets/cash.mp3");
+  if(typeof Audio !== "undefined") {
+    audio = new Audio("/assets/cash.mp3");
+  }
 
   const onInit = ({ conductor }: { conductor: TConductorInstance }) => {
     setConductor(conductor);
@@ -93,7 +97,7 @@ export default function Wallet() {
       const now = (new Date()).getTime() / 1000;
       if (now - latestTx.timestamp < 20) {
         conductor?.shoot();
-        audio.play();
+        audio?.play();
       } 
     }
   }, [latestTx, conductor])
