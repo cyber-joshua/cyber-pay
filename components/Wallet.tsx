@@ -14,7 +14,7 @@ import { Address, Hash, formatUnits } from "viem";
 import CyberButton from "./CyberButton";
 import useTransactions from "@/hooks/useTransactions";
 import { Button } from "./ui/button";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 interface Asset {
   balance: string;
@@ -63,7 +63,6 @@ export default function Wallet() {
 
   const { data: txData } = useTransactions();
   const txs = txData?.me.transactions.list.filter((t: Tx) => Boolean(t.asset?.length)) as Tx[];
-  console.log('AAA', txData);
 
   const router = useRouter();
 
