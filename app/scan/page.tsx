@@ -23,16 +23,15 @@ export default function ScanPage() {
 
     if (!qrcodeRef.current || !cameraIdsRef.current.length) return;
 
-    if (isScanning) {
-      await clear();
-    }
-
+    
     if (!cameraIdRef.current) {
       cameraIdRef.current = cameraIdsRef.current[0];
     } else if (cameraIdsRef.current.length > 1) {
       const index = cameraIdsRef.current.indexOf(cameraIdRef.current);
       cameraIdRef.current = index == 0 ? cameraIdsRef.current[1] : cameraIdsRef.current[0];
     }
+    
+    await clear();
 
     qrcodeRef.current.start(
       cameraIdRef.current, 
@@ -62,9 +61,11 @@ export default function ScanPage() {
   }
 
   const clear = async () => {
-    if (isScanning) {
-      await qrcodeRef.current!.stop();
-      qrcodeRef.current!.clear();
+    try {
+      await qrcodeRef.current?.stop();
+      qrcodeRef.current?.clear();
+    } catch {
+      // nothing
     }
   }
 

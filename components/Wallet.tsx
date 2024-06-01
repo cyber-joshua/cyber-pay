@@ -3,20 +3,18 @@
 
 import LoginButton from "./LoginButton";
 import usePasskey from "@/hooks/usePasskeyTx";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { passkeyAtom, qrAtom } from "@/atoms";
 import { Copy, Gift, Send, SquareCheck } from "lucide-react";
 import Image from "next/image";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useAssets from "@/hooks/useAssets";
-import { Address, Hash, formatUnits, zeroAddress } from "viem";
+import { Address, Hash, formatUnits } from "viem";
 import CyberButton from "./CyberButton";
 import useTransactions from "@/hooks/useTransactions";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-import { qrcodePrefix } from "@/lib/constants";
-import { useToast } from "./ui/use-toast";
 import PayDialog from "./PayDialog";
 
 interface Asset {
@@ -66,7 +64,6 @@ export default function Wallet() {
   const totalUsd = assets?.reduce((partialSum, a) => partialSum + parseFloat(a.usdPrice), 0);
 
   const { data: txData } = useTransactions();
-  const { toast } = useToast();
   const txs = txData?.me?.transactions.list.filter((t: Tx) => Boolean(t.asset?.length)) as Tx[];
 
   const router = useRouter();

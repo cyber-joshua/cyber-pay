@@ -86,13 +86,17 @@ export default function PayDialog() {
   }
 
   return (
-    <Drawer open={open} onOpenChange={(op) => { 
-      if (!op) {
-        setPayInfo('');
-      }
-    }}>
+    <Drawer 
+      onClose={() => { setPayInfo(''); }}
+      open={open} 
+      onOpenChange={(op) => { 
+        if (!op) {
+          setPayInfo('');
+        }
+      }}
+    >
       <DrawerContent className="z-[10009]">
-    <div className={"h-[calc(100vh-468px)] bg-white flex flex-col items-center pt-4 gap-3 transition-all duration-500 " + (open ? 'translate-y-0' : 'translate-y-[2000px]')}>
+    <div className={"h-[calc(100vh-260px)] bg-white flex flex-col items-center pt-4 gap-3 transition-all duration-500 " + (open ? 'translate-y-0' : 'translate-y-[2000px]')}>
       <div className="text-stroke-thin font-bold">WILL TRANSFER</div>
       <div className="text-stroke font-extrabold text-4xl">{amount} {tokenSymbol}</div>
       <div className="font-bold text-gray-400">TO</div>
