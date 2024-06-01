@@ -1,6 +1,5 @@
 'use client'
 
-import Image from "next/image";
 import HomeBgdDot from "@/components/TopAnimation";
 import Wallet from "@/components/Wallet";
 import { useAtomValue } from "jotai";
@@ -12,23 +11,19 @@ export default function Home() {
   const isLoggedIn = Boolean(authInfo);
 
   return (
-    <main className="w-full h-screen flex flex-col">
-      <div className={"relative overflow-x-hidden w-full transition-all duration-500 flex-none " + (isLoggedIn ? "h-48" : "h-[calc(100vh-360px)]")}>
-        <div className={
-          "absolute w-full transition-all top-0 h-96 z-10 " + 
-          (isLoggedIn ? '-translate-y-24': 'translate-y-16')
-        }>
-          <HomeBgdDot />
-        </div>
-        <div 
-          className={
-            "absolute z-20 top-0 w-full flex justify-center " +
-            (isLoggedIn ? 'translate-y-[72px] scale-100' : 'translate-y-[233px] scale-150')
-        }>
-          <Image src="/assets/cyberpay-title.png" height={48} width={208} alt="CyberPay" />
-        </div>
+    <main className="w-full h-screen relative">
+      <div 
+        className={
+          "absolute left-0 right-0 top-0 overflow-hidden transition-all duration-700 flex justify-center items-center " + 
+          (isLoggedIn ? "scale-100 h-72" : "scale-125 h-[calc(100vh-300px)]")
+        }
+      >
+        <HomeBgdDot />
       </div>
-      <div className="relative w-full flex-auto bg-white rounded-t-[48px] pt-12 z-50">
+      <div className={
+        "absolute left-0 bottom-0 right-0 transition-all duration-700 bg-white rounded-t-[48px] z-[9999] " + 
+        (isLoggedIn ? "h-[calc(100vh-288px)]" : "h-80")
+      }>
         <Wallet />
       </div>
     </main>

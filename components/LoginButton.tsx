@@ -18,7 +18,7 @@ import { Input } from './ui/input';
 
 export default function LoginButton() {
 
-  const [username, setUsername] = useState('rntest333');
+  const [username, setUsername] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const credentialIdRef = useRef('');
   const inputRef = useRef(null);
@@ -121,12 +121,12 @@ export default function LoginButton() {
 
   return (
     <div className='relative h-full w-full overflow-hidden'>
-      <div className={'absolute top-0 flex flex-col w-full items-center gap-8 transition-all duration-700 ' + (isCreating ? '-translate-y-96' : 'translate-y-0')}>
+      <div className={'absolute top-12 flex flex-col w-full items-center gap-8 transition-all duration-700 ' + (isCreating ? '-translate-y-96' : 'translate-y-0')}>
 
         <Image 
           src="/assets/connect-passkey-black.png" 
           alt="Connect" 
-          className='mb-10'
+          className='mb-6'
           height={48} 
           width={320} 
         />
@@ -147,12 +147,12 @@ export default function LoginButton() {
         </div>
       </div>
 
-      <div className={'absolute top-0 flex flex-col w-full items-center gap-8 transition-all duration-700 ' + (isCreating ? 'translate-y-0' : 'translate-y-96')}>
+      <div className={'absolute top-12 flex flex-col w-full items-center gap-6 transition-all duration-700 ' + (isCreating ? 'translate-y-0' : 'translate-y-96')}>
 
         <Image 
           src="/assets/enter-username.png" 
           alt="Connect" 
-          className='mb-4'
+          className='mb-0'
           height={48} 
           width={320} 
         />

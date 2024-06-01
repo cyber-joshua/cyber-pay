@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import { useEffect, useState } from 'react';
@@ -12,19 +13,16 @@ const initialCircles = [...Array(count * 1000).keys()];
 
 export default function HomeBgdDot() {
   return (
-    <div
-      className="flex items-center justify-center overflow-hidden w-screen h-96"
-    >
+    <>
       <LayoutGroup>
         <WaveDot />
       </LayoutGroup>
       <div 
         style={{ width: initialSize, height: initialSize }}
-        className='bg-white rounded-full z-[9999] absolute'
-      >
-
-      </div>
-    </div>
+        className='bg-white rounded-full z-[9990] absolute'
+      />
+      <img className='absolute z-[9991]' src="/assets/cyberpay-title.png" width="70%" alt="CyberPay" />
+    </>
   );
 }
 
