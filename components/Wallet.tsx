@@ -1,26 +1,51 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import LoginButton from "./LoginButton";
 import usePasskey from "@/hooks/usePasskeyTx";
-import { Button } from "./ui/button";
 import { useSetAtom } from "jotai";
 import { passkeyAtom } from "@/atoms";
-import { Copy, SquareCheck } from "lucide-react";
+import { Copy, Gift, Send, SquareCheck } from "lucide-react";
 import Image from "next/image";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import { useState } from "react";
 import useAssets from "@/hooks/useAssets";
-import { formatUnits } from "viem";
+import { Address, Hash, formatUnits } from "viem";
+import CyberButton from "./CyberButton";
+import useTransactions from "@/hooks/useTransactions";
 
 interface Asset {
   balance: string;
-cmcUsdPrice: string;
-contract: string;
-decimals: number;
-imageUrl: string;
-name: string;
-symbol: string;
-usdPrice: string;
+  cmcUsdPrice: string;
+  contract: string;
+  decimals: number;
+  imageUrl: string;
+  name: string;
+  symbol: string;
+  usdPrice: string;
+}
+
+interface Tx {
+  txHash: Hash;
+  chainId: number;
+  name: string;
+  status: string;
+  timestamp: number;
+  asset?: [{
+    amount: string;
+    changeType: string;
+    assetType: string;
+    toAddress: Address;
+    asset: {
+      symbol: string;
+      imageUrl: string;
+    }
+  }]
+  interactParty?: {
+    action: string;
+    icon: string;
+    address: Address;
+  }
 }
 
 export default function Wallet() {
@@ -29,13 +54,17 @@ export default function Wallet() {
   const setPasskeyAtom = useSetAtom(passkeyAtom);
   const aa = authInfo?.aa;
   const [copied, setCopied] = useState(false);
-  const { data: assetsData } = useAssets();
 
+  const { data: assetsData } = useAssets();
   const assets = assetsData?.me.tokens as Asset[];
   const totalUsd = assets?.reduce((partialSum, a) => partialSum + parseFloat(a.usdPrice), 0);
 
+  const { data: txData } = useTransactions();
+  const txs = txData?.me.transactions.list.filter((t: Tx) => Boolean(t.asset?.length)) as Tx[];
+  console.log('AAA', txData);
+
   return (
-    <div className="relative h-full flex flex-col px-3 gap-8 items-center">
+    <div className="relative h-full flex flex-col px-3 gap-12 items-center">
       {authInfo ? (
         <>
           <Image 
@@ -43,7 +72,7 @@ export default function Wallet() {
             alt="Account" 
             width={100} 
             height={100} 
-            className="absolute -top-12"
+            className="absolute -top-12 border-[8px] border-white rounded-full"
           />
           <div className=" flex flex-col items-center gap-1">
             <CopyToClipboard text={aa!}
@@ -66,14 +95,27 @@ export default function Wallet() {
               </div>
             )}
           </div>
-          <Button
+
+          <CyberButton 
+            title="Scan qrcode to pay" 
             onClick={() => {
-              setPasskeyAtom(undefined)
+
             }}
-          >
-            Logout
-          </Button>
-          {assets?.map((asset) => <AssetRow key={asset.symbol} token={asset} />)}
+          />
+
+          <div className="w-full">
+            <div className="font-semibold text-lg text-stroke pl-2 mb-4">
+              My Tokens
+            </div>
+            {assets?.map((asset) => <AssetRow key={asset.symbol} token={asset} />)}
+          </div>
+          <div className="w-full">
+            <div className="font-semibold text-lg text-stroke pl-2 mb-4">
+              My Transactions
+            </div>
+            {txs?.map((tx) => <TxRow key={tx.txHash} tx={tx} />)}
+          </div>
+
         </>
       ) : (
         <LoginButton />
@@ -90,13 +132,57 @@ function AssetRow({
   return (
     <div className="w-full flex gap-2 items-center px-4">
       <Image className="flex-none" src={token.imageUrl} alt={token.symbol} width={32} height={32} />
-      <div className="flex-auto font-semibold">{token.name}</div>
+      <div className="flex-auto font-semibold flex flex-col">
+        <div>
+          {token.symbol}
+        </div>
+        <div className="text-sm text-gray-400  -mt-1">
+          {token.name}
+        </div>
+      </div>
       <div className="flex-none font-semibold flex flex-col gap-0 text-right">
         <div className="w-16 overflow-ellipsis">
           {formatUnits(BigInt(token.balance), token.decimals)}
         </div>
         <div className="text-sm text-gray-600 w-16 overflow-ellipsis text-stroke-thin -mt-1">
           ${parseFloat(token.usdPrice).toFixed(2)}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+
+function TxRow({
+  tx
+} : {
+  tx: Tx
+}) {
+
+  const index = Math.floor(Math.random() * 5);
+  const vendors = ["卖蛋糕的", "卖咖啡的", "卖白菜的", "卖西瓜的", "卖炒面的", "币圈乞讨者"]
+  const isReceive = tx.name === 'receive';
+
+  return (
+    <div className="w-full flex gap-2 items-center px-4">
+      <div className="flex-none">
+        {isReceive ? <Gift className="text-green-500" /> : <Send className="text-red-500" />}
+      </div>
+      <div className="flex-auto font-semibold flex flex-col">
+        <div className="text-sm text-gray-400">
+          {isReceive ? 'From' : 'To'}
+        </div>
+        <div>
+          {isReceive ? '好心人' : vendors[index]}
+        </div>
+      </div>
+      <div className="flex-none font-semibold flex items-center gap-1.5">
+        <div>
+          {`${isReceive ? '+' : '-'}${tx.asset![0].amount}`}
+        </div>
+        <img src={tx.asset![0].asset.imageUrl} alt={tx.asset![0].asset.symbol} width={16} height={16} />
+        <div>
+          {tx.asset![0].asset.symbol}
         </div>
       </div>
     </div>
