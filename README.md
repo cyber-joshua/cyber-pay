@@ -26,6 +26,9 @@ CyberPay is a mobile app which can make people pay cryptocurrencies to buy thing
 4. 给自己用passkey新生成的wallet address转点tokens（仅支持Cyber Testnet上的ETH和USDC）
 5. https://cyber-pay.vercel.app/vendor 可以生成测试用的二维码
 6. scan generated qrcode and click "Confirm" to pay
+7. 可以先用这个二维码来玩一下
+   <img width="260" alt="Screenshot 2024-06-01 at 22 16 22" src="https://github.com/cyber-joshua/cyber-pay/assets/153577918/80e7315d-4afc-443c-b537-114f8f5f3bcc">
+
 
 ### Video Link
 
