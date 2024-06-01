@@ -21,7 +21,7 @@ export function useGraphQL<TResult, TVariables>(
 ): UseQueryResult<TResult> {
 
   return useQuery({
-    queryKey: [(document.definitions[0] as any).name.value, variables],
+    queryKey: options?.queryKey ?? [],
     queryFn: async () => {
       try {
         const token = localStorage.getItem(

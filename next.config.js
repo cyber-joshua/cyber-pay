@@ -4,7 +4,16 @@ const withPWA = require('next-pwa')({
 })
 
 const nextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 's2.coinmarketcap.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
 }
  
 module.exports = withPWA(nextConfig)

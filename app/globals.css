@@ -74,3 +74,16 @@
       @apply bg-background text-foreground;
     }
   }
+
+  @layer utilities {
+    .text-stroke-thin {
+      color: 'black';
+      -webkit-text-stroke-width: 2px;
+      -webkit-text-stroke-color: rgba(7,220,16, 0.2);
+    }
+    .text-stroke {
+      color: 'black';
+      -webkit-text-stroke-width: 4px;
+      -webkit-text-stroke-color: rgba(7,220,16, 0.5);
+    }
+  }
