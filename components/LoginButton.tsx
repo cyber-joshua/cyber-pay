@@ -14,6 +14,7 @@ import { startAuthentication, startRegistration } from "@simplewebauthn/browser"
 import usePasskeyAuth from "@/hooks/usePasskeyAuth";
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import CyberButton from './CyberButton';
 
 
 export default function LoginButton() {
@@ -131,23 +132,23 @@ export default function LoginButton() {
           width={320} 
         />
         <div className='px-8 w-full flex flex-col gap-8'>
-        <Button
-          variant="cyber"
+        <CyberButton
           className='w-full'
-          size="xl"
           onClick={handleGet}
-          disabled={loginLoading}
-        >Login with passkey</Button>
-        <Button
-        variant="cyber"
-        size="xl"
+          loading={loginLoading}
+          disabled={registerLoading}
+          title={loginLoading ? 'Logging in...' : 'Login with passkey'}
+        />
+        <CyberButton
         className='w-full'
           onClick={handleCreate}
-        >Create a passkey</Button>
+          disabled={loginLoading}
+          title='Create a passkey'
+        />
         </div>
       </div>
 
-      <div className={'absolute top-12 flex flex-col w-full items-center gap-6 transition-all duration-700 ' + (isCreating ? 'translate-y-0' : 'translate-y-96')}>
+      <div className={'absolute top-12 flex flex-col w-full items-center gap-6 transition-all duration-700 ' + (isCreating ? 'translate-y-0' : 'translate-y-[600px]')}>
 
         <Image 
           src="/assets/enter-username.png" 
@@ -165,13 +166,13 @@ export default function LoginButton() {
             className='border-b border-b-gray-300 outline-none shadow-none p-2 text-3xl w-full text-center'
             onChange={(e) => { setUsername(e.target.value) }}
           />
-          <Button
-        variant="cyber"
-        size="xl"
+          <CyberButton
         className='w-full'
           onClick={createPasskey}
-          disabled={registerLoading}
-        >Confirm</Button>
+          loading={registerLoading}
+          disabled={loginLoading}
+          title={registerLoading ? 'Registering...' : 'Register'}
+        />
         </div>
 
         <div className='underline text-[#07DC10]' onClick={() => { setIsCreating(false) }}>
