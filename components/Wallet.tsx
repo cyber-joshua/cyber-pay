@@ -14,6 +14,7 @@ import { Address, Hash, formatUnits } from "viem";
 import CyberButton from "./CyberButton";
 import useTransactions from "@/hooks/useTransactions";
 import { Button } from "./ui/button";
+import { useRouter } from "next/router";
 
 interface Asset {
   balance: string;
@@ -64,6 +65,8 @@ export default function Wallet() {
   const txs = txData?.me.transactions.list.filter((t: Tx) => Boolean(t.asset?.length)) as Tx[];
   console.log('AAA', txData);
 
+  const router = useRouter();
+
   return (
     <div className="h-full flex flex-col px-3 gap-12 items-center overflow-y-scroll">
       {authInfo ? (
@@ -93,7 +96,7 @@ export default function Wallet() {
           <CyberButton 
             title="Scan qrcode to pay" 
             onClick={() => {
-
+              router.push('/scan');
             }}
           />
 
@@ -170,7 +173,7 @@ function TxRow({
           {isReceive ? 'From' : 'To'}
         </div>
         <div>
-          {isReceive ? '好心人' : vendors[index]}
+          {isReceive ? '好心人.cyber' : `${vendors[index]}.cyber`}
         </div>
       </div>
       <div className="flex-none font-semibold flex items-center gap-1.5">
