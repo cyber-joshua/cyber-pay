@@ -8,7 +8,7 @@ import { passkeyAtom, qrAtom } from "@/atoms";
 import { Copy, Gift, Send, SquareCheck } from "lucide-react";
 import Image from "next/image";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAssets from "@/hooks/useAssets";
 import { Address, Hash, formatUnits } from "viem";
 import CyberButton from "./CyberButton";
@@ -16,6 +16,8 @@ import useTransactions from "@/hooks/useTransactions";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import PayDialog from "./PayDialog";
+import Explosion from "react-canvas-confetti/dist/presets/explosion";
+import { TConductorInstance } from "react-canvas-confetti/dist/types";
 
 interface Asset {
   balance: string;
@@ -58,21 +60,46 @@ export default function Wallet() {
   const setPasskeyAtom = useSetAtom(passkeyAtom);
   const aa = authInfo?.aa;
   const [copied, setCopied] = useState(false);
+  const [conductor, setConductor] = useState<TConductorInstance>();
 
-  const { data: assetsData } = useAssets();
+  const { data: assetsData, refetch: refetchAssets } = useAssets();
   const assets = assetsData?.me?.tokens as Asset[];
   const totalUsd = assets?.reduce((partialSum, a) => partialSum + parseFloat(a.usdPrice), 0);
 
-  const { data: txData } = useTransactions();
+  const { data: txData, refetch: refetchTxs } = useTransactions();
   const txs = txData?.me?.transactions.list.filter((t: Tx) => Boolean(t.asset?.length)) as Tx[];
+  const latestTx = txs?.[0];
 
   const router = useRouter();
+  const audio = new Audio("/assets/cash.mp3");
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setPayInfo(`cyberpay:卖咖啡的---0x0414DDBf69294B1eE580eEf88862dEa94B726A07---0.01---ETH---${zeroAddress}---${18}`)
-  //   }, 3000)
-  // }, [])
+  const onInit = ({ conductor }: { conductor: TConductorInstance }) => {
+    setConductor(conductor);
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      refetchAssets();
+      refetchTxs();
+    }, 10000);
+
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (latestTx) {
+      const now = (new Date()).getTime() / 1000;
+      if (now - latestTx.timestamp < 20) {
+        conductor?.shoot();
+        audio.play();
+      } 
+    }
+  }, [latestTx, conductor])
+
+
+
 
   return (
     <div className="h-full flex flex-col px-3 gap-12 items-center overflow-y-scroll pb-10">
@@ -140,6 +167,7 @@ export default function Wallet() {
         <LoginButton />
       )}
       <PayDialog />
+      <Explosion onInit={onInit} />
     </div>
   )
 }

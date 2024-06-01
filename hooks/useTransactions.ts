@@ -40,7 +40,7 @@ const MY_TRANSACTIONS = gql`
 
 export default function useTransactions() {
   const authInfo = useAtomValue(passkeyAtom);
-  const { data, isLoading, refetch } =
+  const { data, isLoading, refetch, isFetched } =
     useGraphQL(MY_TRANSACTIONS as unknown as TypedDocumentNode, undefined, {
       queryKey: ['mytransactions'],
       enabled: Boolean(authInfo)
@@ -49,6 +49,7 @@ export default function useTransactions() {
   return {
     data,
     isLoading,
-    refetch
+    refetch,
+    isFetched
   }
 }
