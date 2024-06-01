@@ -16,3 +16,4 @@ export const cyberTestnet = {
 };
 
 export const qrcodePrefix = 'cyberpay:';
+export const qrcodeSeparator = '---';
