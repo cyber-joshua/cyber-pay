@@ -13,6 +13,7 @@ import useAssets from "@/hooks/useAssets";
 import { Address, Hash, formatUnits } from "viem";
 import CyberButton from "./CyberButton";
 import useTransactions from "@/hooks/useTransactions";
+import { Button } from "./ui/button";
 
 interface Asset {
   balance: string;
@@ -64,16 +65,9 @@ export default function Wallet() {
   console.log('AAA', txData);
 
   return (
-    <div className="relative h-full flex flex-col px-3 gap-12 items-center">
+    <div className="h-full flex flex-col px-3 gap-12 items-center overflow-y-scroll">
       {authInfo ? (
         <>
-          <Image 
-            src="/assets/avatar.png" 
-            alt="Account" 
-            width={100} 
-            height={100} 
-            className="absolute -top-12 border-[8px] border-white rounded-full"
-          />
           <div className=" flex flex-col items-center gap-1">
             <CopyToClipboard text={aa!}
             onCopy={() => {
@@ -115,7 +109,10 @@ export default function Wallet() {
             </div>
             {txs?.map((tx) => <TxRow key={tx.txHash} tx={tx} />)}
           </div>
-
+          
+          <Button variant="outline" onClick={() => { setPasskeyAtom(undefined) }}>
+            Logout
+          </Button>
         </>
       ) : (
         <LoginButton />

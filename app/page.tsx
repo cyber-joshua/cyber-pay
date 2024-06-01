@@ -4,6 +4,7 @@ import HomeBgdDot from "@/components/TopAnimation";
 import Wallet from "@/components/Wallet";
 import { useAtomValue } from "jotai";
 import { passkeyAtom } from "@/atoms";
+import Image from "next/image";
 
 export default function Home() {
 
@@ -24,6 +25,13 @@ export default function Home() {
         "absolute left-0 bottom-0 right-0 transition-all duration-700 bg-white rounded-t-[48px] z-[9999] " + 
         (isLoggedIn ? "h-[calc(100vh-288px)]" : "h-80")
       }>
+        <Image 
+            src="/assets/avatar.png" 
+            alt="Account" 
+            width={100} 
+            height={100} 
+            className="absolute -top-12 left-1/2 -translate-x-[50px] border-[8px] border-white rounded-full"
+          />
         <Wallet />
       </div>
     </main>
