@@ -11,7 +11,7 @@ export default function Home() {
   const isLoggedIn = Boolean(authInfo);
 
   return (
-    <main className="w-full h-screen relative">
+    <main className="w-full h-screen relative overflow-hidden">
       <div 
         className={
           "absolute left-0 right-0 top-0 overflow-hidden transition-all duration-700 flex justify-center items-center " + 
