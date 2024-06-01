@@ -183,7 +183,13 @@ function AssetRow({
 }) {
   return (
     <div className="w-full flex gap-2 items-center px-4 border-b border-b-gray-200 pb-4 mb-4">
-      <Image className="flex-none" src={token.imageUrl} alt={token.symbol} width={32} height={32} />
+      <Image 
+        className="flex-none" 
+        src={token.symbol === 'USDC' ? "https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png" : token.imageUrl} 
+        alt={token.symbol} 
+        width={32} 
+        height={32} 
+      />
       <div className="flex-auto font-semibold flex flex-col">
         <div>
           {token.symbol}
